@@ -153,6 +153,7 @@ public class LocalesRestController {
 		cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+recurso.getFilename()+"\"");
 		return new ResponseEntity<Resource>(recurso,cabecera,HttpStatus.OK);
 	}
+	
 	@GetMapping("/photo/{id}")
 	public ResponseEntity<?> getImage(@PathVariable Long id) throws IOException {
 
@@ -187,15 +188,4 @@ public class LocalesRestController {
 		}
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 }

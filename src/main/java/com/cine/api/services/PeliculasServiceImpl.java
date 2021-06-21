@@ -12,14 +12,13 @@ import com.cine.api.modelo.Peliculas;
 @Service
 public class PeliculasServiceImpl implements IPeliculasService {
 
-	
 	@Autowired
 	private IPeliculasDao peliculasDao;
 	
 	@Override
 	@Transactional(readOnly = true)
 	public List<Peliculas> findAll() {
-		return  (List<Peliculas>)peliculasDao.findAll();
+		return (List<Peliculas>)peliculasDao.findAll();
 	}
 
 	@Override
@@ -37,8 +36,7 @@ public class PeliculasServiceImpl implements IPeliculasService {
 
 	@Override
 	public void delete(Long idpeli) {
-	peliculasDao.deleteById(idpeli);
-		
+		peliculasDao.deleteById(idpeli);
 	}
 
 }

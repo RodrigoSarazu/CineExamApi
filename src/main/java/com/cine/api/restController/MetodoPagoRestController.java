@@ -30,54 +30,54 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.cine.api.modelo.Peliculas;
-import com.cine.api.services.IPeliculasService;
+import com.cine.api.modelo.MetodoPago;
+import com.cine.api.services.IMetodoPagoService;
 import com.cine.api.services.IUploadFileService;
 
 @RestController
 @RequestMapping("/api")
-public class PeliculasRestController {
+public class MetodoPagoRestController {
 	
 	@Autowired
-	private IPeliculasService peliculasService;
+	private IMetodoPagoService metodopagoService;
 	
 	@Autowired
 	private IUploadFileService uploadService;
 
-	// listar peliculas
-	@GetMapping("/peliculas")
+	// listar por método de pago
+	@GetMapping("/listarMetodoPago")
 	public ResponseEntity<?> listar() {
 		
 		Map<String, Object> response = new HashMap<>();
-		List<Peliculas>peliculas=peliculasService.findAll();
+		List<MetodoPago>metodopago=metodopagoService.findAll();
 		
-		response.put("peliculas", peliculas);
+		response.put("metodopago",metodopago);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
-	
-	// listar por idpeli
-	@GetMapping("/peliculas/{idpeli}")
-	public ResponseEntity<?> show(@PathVariable Long idpeli) {
-		Peliculas peliculas = null;
+
+	// listar por id método de pago
+	@GetMapping("/listarMetodoPago/{idmetpago}")
+	public ResponseEntity<?> show(@PathVariable Long idmetpago) {
+		MetodoPago metodopago = null;
 		Map<String, Object> response = new HashMap<>();
 		try {
-			peliculas = peliculasService.findById(idpeli);
+			metodopago = metodopagoService.findById(idmetpago);
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al realizar la consulta");
 			response.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		if (peliculas == null) {
-			response.put("mensaje", "La pelicula idpeli: ".concat(idpeli.toString().concat(" no existe en la base de datos!")));
+		if (metodopago == null) {
+			response.put("mensaje", "El cliente ud: ".concat(idmetpago.toString().concat(" no existe en la base de datos!")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<Peliculas>(peliculas, HttpStatus.OK);
+		return new ResponseEntity<MetodoPago>(metodopago, HttpStatus.OK);
 	}
-	
-	// agregar peliculas
-	@PostMapping("/addpeliculas")
-	public ResponseEntity<?> create(@Valid @RequestBody Peliculas peliculas, BindingResult result) {
-		Peliculas peliculasNew = null;
+
+	// agregar método de pago
+	@PostMapping("/agregarMetodoPago")
+	public ResponseEntity<?> create(@Valid @RequestBody MetodoPago metodopago, BindingResult result) {
+		MetodoPago localNew = null;
 		Map<String, Object> response = new HashMap<>();
 		if (result.hasErrors()) {
 			List<String> errors = result.getFieldErrors().stream()
@@ -87,43 +87,43 @@ public class PeliculasRestController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
 		try {
-			peliculasNew = peliculasService.save(peliculas);
+			localNew = metodopagoService.save(metodopago);
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al realizar el insert en la base de datos");
 			response.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		response.put("mensaje", "la nueva pelicula ha sido creado con exito");
-		response.put("peliculasNew", peliculasNew);
+		response.put("mensaje", "El método de pago ha sido creado con exito");
+		response.put("localNew", localNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
-	
-	// eliminar peliculas
-	@DeleteMapping("/eliminarpeli/{idpeli}")
-	public ResponseEntity<?> delete(@PathVariable Long idpeli) {
+
+	// eliminar método de pago
+	@DeleteMapping("/eliminarMetodoPago/{idmetpago}")
+	public ResponseEntity<?> delete(@PathVariable Long idmetpago) {
 		Map<String, Object> response = new HashMap<>();
 		try {
-			Peliculas peliculas = peliculasService.findById(idpeli);
-			String nombreFotoAnterior = peliculas.getFotopeli();
-			uploadService.eliminar(nombreFotoAnterior);
-			peliculasService.delete(idpeli);
+			MetodoPago metodopago = metodopagoService.findById(idmetpago);
+			String nombreFotoAnterior = metodopago.getImgtipopago();
+			uploadService.eliminar(nombreFotoAnterior);	
+			metodopagoService.delete(idmetpago);
 		} catch (DataAccessException e) {
-
-			response.put("mensaje", "Error al realizar el eliminar en la base de datos");
+		
+			response.put("mensaje", "Error al eliminar este método en la base de datos");
 			response.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		response.put("mensaje", "la pelicula ha sido eliminado con éxito");
+		response.put("mensaje", "El método de pago ha sido eliminado con éxito");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
-
-	// enviar imagen
-	@PostMapping("/peliculas/upload")
+	
+	//enviar imagen método de pago
+	@PostMapping("/metodopago/upload")
 	public ResponseEntity<?> upload(@RequestParam("archivo") MultipartFile archivo,
-			@RequestParam("idpeli") Long idpeli) {
+			@RequestParam("idmetpago") Long idmetpago) {
 
 		Map<String, Object> response = new HashMap<>();
-		Peliculas peliculas = peliculasService.findById(idpeli);
+		MetodoPago metodopago = metodopagoService.findById(idmetpago);
 		if (!archivo.isEmpty()) {
 			String nombreArchivo = null;
 			try {
@@ -134,18 +134,18 @@ public class PeliculasRestController {
 				response.put("error", e.getMessage().concat(":").concat(e.getCause().getMessage()));
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			String nombreFotoAnterior = peliculas.getFotopeli();
+			String nombreFotoAnterior = metodopago.getImgtipopago();
 			uploadService.eliminar(nombreFotoAnterior);
-			peliculas.setFotopeli(nombreArchivo);
-			peliculasService.save(peliculas);
-			response.put("peliculas", peliculas);
+			metodopago.setImgtipopago(nombreArchivo);
+			metodopagoService.save(metodopago);
+			response.put("metodopago", metodopago);
 			response.put("mensaje", "Has subido correctamente la imagen: " + nombreArchivo);
 		}
-
+		
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 
-	@GetMapping("/uploads/imagen/{nombreFoto:.+}")
+	@GetMapping("/uploads/imagenMetPago/{nombreFoto:.+}")
 	public ResponseEntity<Resource> verFoto(@PathVariable String nombreFoto) {
 		Resource recurso = null;
 		try {
@@ -158,29 +158,29 @@ public class PeliculasRestController {
 		return new ResponseEntity<Resource>(recurso, cabecera, HttpStatus.OK);
 	}
 
-	@GetMapping("/photopeli/{idpeli}")
-	public ResponseEntity<?> getImage(@PathVariable Long idpeli) throws IOException {
+	@GetMapping("/photometpago/{idmetpago}")
+	public ResponseEntity<?> getImage(@PathVariable Long idmetpago) throws IOException {
 
-		Peliculas peliculas = null;
-		String fotopeli = null;
+		MetodoPago metodopago = null;
+		String fotometpag = null;
 		Map<String, Object> response = new HashMap<>();
 
 		try {
-			peliculas = peliculasService.findById(idpeli);
+			metodopago = metodopagoService.findById(idmetpago);
 
-			if (peliculas == null) {
+			if (metodopago == null) {
 				response.put("mensaje",
-						"La pelicula con idpeli: " + idpeli.toString() + " no existe en la base de datos");
+						"El método de pago con id: " + idmetpago.toString() + " no existe en la base de datos");
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			} else {
 
-				fotopeli = peliculas.getFotopeli();
+				fotometpag = metodopago.getImgtipopago();
 
-				if (fotopeli == null) {
-					response.put("mensaje", "La película que seleccionó no cuenta con foto");
+				if (fotometpag == null) {
+					response.put("mensaje", "El método de pago que seleccionó no cuenta con foto");
 					return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 				} else {
-					File img = new File("uploads/" + fotopeli);
+					File img = new File("uploads/" + fotometpag);
 					return ResponseEntity.ok()
 							.contentType(MediaType.valueOf(FileTypeMap.getDefaultFileTypeMap().getContentType(img)))
 							.body(Files.readAllBytes(img.toPath()));
@@ -191,9 +191,6 @@ public class PeliculasRestController {
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
 	}
-			
+	
 }
-
-

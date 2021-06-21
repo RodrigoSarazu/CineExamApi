@@ -7,6 +7,4 @@ import com.cine.api.modelo.Peliculas;
 
 public interface IPeliculasDao extends JpaRepository<Peliculas, Long>{
 
-	
-
 }

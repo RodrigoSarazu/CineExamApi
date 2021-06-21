@@ -18,30 +18,38 @@ public class Locales implements Serializable{
 	
 	private String nomloc;
 	private String foto;
+	
 	public Locales() {
 		super();
 	}
+	
 	public Locales(Long id, String nomloc, String foto) {
 		super();
 		this.id = id;
 		this.nomloc = nomloc;
 		this.foto = foto;
 	}
+	
 	public Long getId() {
 		return id;
 	}
+	
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
 	public String getNomloc() {
 		return nomloc;
 	}
+	
 	public void setNomloc(String nomloc) {
 		this.nomloc = nomloc;
 	}
+	
 	public String getFoto() {
 		return foto;
 	}
+	
 	public void setFoto(String foto) {
 		this.foto = foto;
 	}

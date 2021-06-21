@@ -18,12 +18,9 @@ public class Peliculas implements Serializable {
 	private String infopeli;
 	private String fotopeli;
 	
-	
 	public Peliculas() {
 		super();
 	}
-	
-	
 	
 	public Peliculas(Long idpeli, String nompeli, String infopeli, String fotopeli) {
 		super();
@@ -32,27 +29,35 @@ public class Peliculas implements Serializable {
 		this.infopeli = infopeli;
 		this.fotopeli = fotopeli;
 	}
+	
 	public Long getIdpeli() {
 		return idpeli;
 	}
+	
 	public void setIdpeli(Long idpeli) {
 		this.idpeli = idpeli;
 	}
+	
 	public String getNompeli() {
 		return nompeli;
 	}
+	
 	public void setNompeli(String nompeli) {
 		this.nompeli = nompeli;
 	}
+	
 	public String getInfopeli() {
 		return infopeli;
 	}
+	
 	public void setInfopeli(String infopeli) {
 		this.infopeli = infopeli;
 	}
+	
 	public String getFotopeli() {
 		return fotopeli;
 	}
+	
 	public void setFotopeli(String fotopeli) {
 		this.fotopeli = fotopeli;
 	}
